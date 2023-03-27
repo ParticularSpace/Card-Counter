@@ -58,6 +58,43 @@ button[type="submit"]:hover {
   background-color: #3E8E41;
 }
 
+/* Buttons */
+button {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px;
+  cursor: pointer;
+  transition-duration: 0.4s;
+}
+
+/* On hover */
+button:hover {
+  background-color: #3e8e41;
+}
+
+/* Submit button */
+#submit-btn {
+  background-color: #008CBA;
+}
+
+/* Reset cards button */
+#reset-cards-btn {
+  background-color: #f44336;
+}
+
+/* Reset count button */
+#reset-count-btn {
+  background-color: #555555;
+}
+
+
 .card {
   width: 250px;
   height: 350px;

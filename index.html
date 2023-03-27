@@ -25,11 +25,17 @@
       <label for="decks">Number of Decks:</label>
       <input type="number" id="decks" value="6" min="1" max="8" required />
     </div>
+    <div class="liveCount">
+      <h2>Live Count:</h2>
+      <p id="count-display" class="count"></p>
+    <div class="suggestions">
+      <h2>Next Move:</h2>
+      <p class="suggestion"></p>
+    </div>
 
-      <div class="dealer-layout">
       <h2>Dealer Cards:</h2>
+      <div class="dealer-layout">
       <div class="card-select">
-        <label for="dealer-1">Dealer:</label>
         <select id="dealer-1" required>
           <option value="" selected disabled hidden>Select card...</option>
           <option value="2">2</option>
@@ -64,6 +70,7 @@
         </select>
       </div>
       </div>
+
       <h2>Player Cards:</h2>
       <div class="player-row">
         <div class="player">
@@ -313,19 +320,12 @@
         </div>
       </div>
     
-
     <div class="button-group">
-      <button id="submit" class="btn-primary">Submit</button>
-      <button id="reset" class="btn-primary">Reset Cards</button>
-      <button id="reset-count" class="btn-primary">Reset Count</button>
+      <button id="submit-cards-btn" class="btn-primary">Submit</button>
+      <button id="reset-cards-btn" class="btn-primary">Reset Cards</button>
+      <button id="reset-count-btn" class="btn-primary">Reset Count</button>
     </div>
-    <div class="liveCount">
-      <h2>Live Count:</h2>
-      <p class="count"></p>
-    <div class="suggestions">
-      <h2>Next Move:</h2>
-      <p class="suggestion"></p>
-    </div>
+
     <div class="previous-hands">
       <h2>Previous Hands:</h2>
       <ul class="hands"></ul>
