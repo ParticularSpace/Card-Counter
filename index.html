@@ -1,109 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Black Jack Card Counter</title>
 
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="assets/css/style.css" />
-  </head>
-  <body>
-    <h1 class="title">Black Jack Card Counter</h1>
-    <p class="description">
-      Enter the cards you have been dealt and the dealer's up card to see the
-      best move.
-    </p>
-   
-      <h2 class="count-number">Running Count:</h2>
-    <div class="card-layout">
-      <select
-        class="form-select"
-        id="cards"
-        aria-label="Default select example"
-      > 
-        <option selected>Select your cards...</option>
-      </select>
-      <select
-        class="form-select"
-        id="cards"
-        aria-label="Default select example"
-      >
-        <option selected>Select your cards...</option>
-      </select>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blackjack Card Counter</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="title">Blackjack Card Counter</h1>
+    <div class="description">
+      <p>
+        Select the cards for each player and dealer, and enter the number of
+        decks in the shoe.
+      </p>
+      <p>
+        The card count and suggested next move will be updated based on
+        perfect blackjack strategy and the true count.
+      </p>
     </div>
-    <div class="dealer-layout">
-    <select class="form-select" id="dealer" aria-label="Default select example">
-      <option selected>Select your cards...</option>
-    </select>
-    <select class="form-select" id="dealer" aria-label="Default select example">
-      <option selected>Select your cards...</option>
-    </select>
+    <div class="input-group">
+      <label for="decks">Number of Decks:</label>
+      <input type="number" id="decks" value="6" min="1" max="8" required />
     </div>
-    <div class="suggestions">
-      <h2>Next best move:</h2>
-    </div>
-    <div id="stand" class="hidden">
-      <h2 class="move-title">Stand:</h2>
-    </div>
-    <div id="hit" class="hidden">
-      <h2 class="move-title">Hit:</h2>
-    </div>
-    <div id="double" class="hidden">
-      <h2 class="move-title">Double:</h2>
-    </div>
-    <div id="split" class="hidden">
-      <h2 class="move-title">Split:</h2>
-    </div>
-    <div class="previous-hands">
-      <h2 class="previous-title">Previous Hands</h2>
-      <div class="hands">
-        <div class="hand">
-          <h3>Hand 1</h3>
-          <p>Dealer's card: 10</p>
-          <p>Cards: 10, 10</p>
-          <p>Move: Stand</p>
+
+      <div class="dealer-layout">
+      <h2>Dealer Cards:</h2>
+      <div class="card-select">
+        <label for="dealer-1">Dealer:</label>
+        <select id="dealer-1" required>
+          <option value="" selected disabled hidden>Select card...</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="J">J</option>
+          <option value="Q">Q</option>
+          <option value="K">K</option>
+          <option value="A">A</option>
+        </select>
+        <select id="dealer-2" required>
+          <option value="" selected disabled hidden>Select card...</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="J">J</option>
+          <option value="Q">Q</option>
+          <option value="K">K</option>
+          <option value="A">A</option>
+        </select>
+      </div>
+      </div>
+      <h2>Player Cards:</h2>
+      <div class="player-row">
+        <div class="player">
+          <label for="player-1-1">Player 1:</label>
+          <select id="player-1-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-1-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
         </div>
-        <div class="hand">
-          <h3>Hand 2</h3>
-          <p>Dealer's card: 10</p>
-          <p>Cards: 10, 10</p>
-          <p>Move: Stand</p>
+        <div class="player">
+          <label for="player-2-1">Player 2:</label>
+          <select id="player-2-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-2-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
         </div>
-        <div class="hand">
-          <h3>Hand 3</h3>
-          <p>Dealer's card: 10</p>
-          <p>Cards: 10, 10</p>
-          <p>Move: Stand</p>
+        <div class="player">
+          <label for="player-3-1">Player 3:</label>
+          <select id="player-3-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-3-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
         </div>
-        <div class="hand">
-          <h3>Hand 4</h3>
-          <p>Dealer's card: 10</p>
-          <p>Cards: 10, 10</p>
-          <p>Move: Stand</p>
+        <div class="player">
+          <label for="player-4-1">Player 4:</label>
+          <select id="player-4-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-4-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
         </div>
-        <div class="hand">
-          <h3>Hand 5</h3>
-          <p>Dealer's card: 10</p>
-          <p>Cards: 10, 10</p>
-          <p>Move: Stand</p>
+        <div class="player">
+          <label for="player-5-1">Player 5:</label>
+          <select id="player-5-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-5-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+        </div>
+        <div class="player">
+          <label for="player-6-1">Player 6:</label>
+          <select id="player-6-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-6-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+        </div>
+        <div class="player">
+          <label for="player-7-1">Player 7:</label>
+          <select id="player-7-1" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+          <select id="player-7-2" required>
+            <option value="" selected disabled hidden>Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
         </div>
       </div>
+    
+
+    <div class="button-group">
+      <button id="submit" class="btn-primary">Submit</button>
+      <button id="reset" class="btn-primary">Reset Cards</button>
+      <button id="reset-count" class="btn-primary">Reset Count</button>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <div class="liveCount">
+      <h2>Live Count:</h2>
+      <p class="count"></p>
+    <div class="suggestions">
+      <h2>Next Move:</h2>
+      <p class="suggestion"></p>
+    </div>
+    <div class="previous-hands">
+      <h2>Previous Hands:</h2>
+      <ul class="hands"></ul>
+    </div>
+  </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/script.js"></script>
+</body>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
-
-    <script src="assets/js/script.js"></script>
-  </body>
 </html>

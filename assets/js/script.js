@@ -1,177 +1,134 @@
-const $hit = $('#hit')
-const $stand = $('#stand')
-const $double = $('#double')
-const $split = $('#split')
-const $reset = $('#reset')
-const $betAmount = $('#bet-amount')
-const $bust = $('#bust')
-const $win = $('#win')
-const $blackJack = $('#black-jack')
-const $push = $('#push')
+// // Define card values
+// const cardValues = {
+//   '2': 1,
+//   '3': 1,
+//   '4': 1,
+//   '5': 1,
+//   '6': 1,
+//   '7': 0,
+//   '8': 0,
+//   '9': 0,
+//   '10': -1,
+//   'J': -1,
+//   'Q': -1,
+//   'K': -1,
+//   'A': -1
+// };
 
-const countCards = {
-    two : 1,
-    three : 1,
-    four : 1,
-    five : 1,
-    six : 1,
-    seven : 0,
-    eight : 0,
-    nine: 0 ,
-    ten: -1 ,
-    J: -1 ,
-    Q: -1 ,
-    K: -1 ,
-    A: -1 
-    };
+// // Initialize count
+// let count = 0;
 
-    let yourHand = []; //will be the array of your two cards
-    let yourHandValue = 0; //will be the sum of your two cards
+// // Initialize previous hands array
+// let previousHands = [];
 
-    let liveCount = 0; //will be the key pair value of the cards in play over the whole time playing
+// // Add event listener to submit button
+// $('#submit').on('click', function() {
+//   // Get player cards
+//   let playerCards = [];
+//   $('#player-1, #player-2, #player-3, #player-4, #player-5, #player-6, #player-7').each(function() {
+//     let card = $(this).val();
+//     if (card != 'Select your cards...') {
+//       playerCards.push(card);
+//     }
+//   });
 
-    let trueCount = 0; //will be the liveCount divided by the number of decks in play
+//   // Get dealer cards
+//   let dealerCards = [];
+//   $('#dealer-1, #dealer-2').each(function() {
+//     let card = $(this).val();
+//     if (card != 'Select your cards...') {
+//       dealerCards.push(card);
+//     }
+//   });
 
-    let numberOfDecks = 0; // will be the number of decks in play
+//   // Get number of decks
+//   let numDecks = $('#decks').val();
+  
+//   // Calculate true count
+//   let trueCount = count / numDecks;
 
-    let dealerHand = []; //will be the array of the dealers two cards
-    let dealerHandVAlue = 0; //will be the sum of the dealers two cards
+//   // Get suggested move based on perfect blackjack strategy
+//   let suggestedMove = getSuggestedMove(playerCards, dealerCards, trueCount);
 
-    let bet = 0; //will be the amount of money you should bet
-    let money = 0; //will be the amount of money you have to play with
+//   // Add hand to previous hands array
+//   previousHands.push({
+//     playerCards: playerCards,
+//     dealerCards: dealerCards,
+//     suggestedMove: suggestedMove
+//   });
 
-    let splitHand = []; //will be the array of the second hand you split
-    let splitHandValue = 0; //will be the sum of the second hand you split
+//   // Update hands list
+//   updateHandsList(previousHands);
 
-    let split = false; //will be true if you should split your hand
+//   // Update suggested move
+//   updateSuggestedMove(suggestedMove);
+// });
 
-    let doubleDown = false; //will be true if you should double down
+// // Add event listener to reset button
+// $('#reset').on('click', function() {
+//   // Reset player cards
+//   $('#player-1, #player-2, #player-3, #player-4, #player-5, #player-6, #player-7').val('Select your cards...');
+  
+//   // Reset dealer cards
+//   $('#dealer-1, #dealer-2').val('Select your cards...');
 
-    let bust = false; //will be true if you bust
+//   // Clear previous hands array
+//   previousHands = [];
 
-    let win = false; //will be true if you win
+//   // Update hands list
+//   updateHandsList(previousHands);
 
-    let blackJack = false; //will be true if you get a black jack
+//   // Reset suggested move
+//   updateSuggestedMove('');
+// });
 
-    let push = false; //will be true if you push
+// // Add event listener to reset count button
+// $('#reset-count').on('click', function() {
+//   // Reset count
+//   count = 0;
 
-    let stand = false; //will be true if you stand
+//   // Update count display
+//   updateCountDisplay(count);
+// });
 
-    let dealerBust = false; //will be true if the dealer busts
+// // Update count display
+// function updateCountDisplay(count) {
+//   $('#count').text(count);
+// }
 
-    let dealerBlackJack = false; //will be true if the dealer gets a black jack
+// // Get suggested move based on perfect blackjack strategy
+//   // ... code to calculate suggested move ...
 
-    let dealerStand = false; //will be true if the dealer stands
+//   function getSuggestedMove(playerCards, dealerCards, trueCount) {
+  
+// }
 
-    let dealerPush = false; //will be true if the dealer pushes
+// // Function to calculate the value of a hand
+// function getHandValue(cards) {
 
-    let dealerWin = false; //will be true if the dealer wins
+  
+// }
 
+// // Update hands list
+// function updateHandsList(previousHands) {
+//   // ... code to update hands list ...
+// }
 
-    //this function will be called when the page loads it will populate the drop down options with the cards using a for each loop to go through key value pairs
-    function populateCards() {
-        // simulate fetching data from API
-        const cards = ['Ace', 'King', 'Queen', 'Jack', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
-      
-        // get select element
-        const cardsSelect = document.getElementById('cards');
-      
-        // remove loading message
-        cardsSelect.innerHTML = '';
-      
-        // populate select element with options
-        cards.forEach((card, index) => {
-          const option = document.createElement('option');
-          option.value = index + 1;
-          option.text = card;
-          cardsSelect.appendChild(option);
-        });
-      }
-      
-      function populateDealers() {
-        // simulate fetching data from API
-        const dealers = ['Dealer A', 'Dealer B', 'Dealer C'];
-      
-        // get select element
-        const dealerSelect = document.getElementById('dealer');
-      
-        // remove loading message
-        dealerSelect.innerHTML = '';
-      
-        // populate select element with options
-        dealers.forEach((dealer, index) => {
-          const option = document.createElement('option');
-          option.value = index + 1;
-          option.text = dealer;
-          dealerSelect.appendChild(option);
-        });
-      }
-      
-      // call functions to populate select elements
-      populateCards();
-      populateDealers();
-      
-        
-    
-    
+// // Update suggested move
+// function updateSuggestedMove(suggestedMove) {
+//   // ... code to update suggested move ...
+// }
 
-    //this function will be called when the hit button is clicked
-    function playerHit() {
+// // Add event listeners to player and dealer card select elements
+// $('.card-layout select').on('change', function() {
+//   // Get card value
+//   let card = $(this).val();
 
-    }
+//   // Add card value to count
+//   count += cardValues[card];
 
-    //this function will be called when the stand button is clicked
-    function playerStand() {
-            
-    }
-
-    //this function will be called when the double button is clicked
-    function playerDouble() {
-            
-    }
-
-    //this function will be called when the split button is clicked
-    function playerSplit() {
-                
-    }
-        
-    //this function will be called when the reset button is clicked
-    function preset() {
-                    
-    }
-
-    //this function will be called when the bet amount is changed
-    function playerBetAmount() {
-
-    }
-
-    //this function will be called when the game is pushed
-    function playerPushed() {
-
-    }
-
-    //this function will be called when the game is black jacked
-    function playerBlackJack() {
-            
-        }
-
-    //this function will be called when the game is busted
-    function gameBusted() {
-
-    } 
-    
-    //this function will be called when the game is won
-    function playerWon() {
-
-    } 
-
-    //this function will be called when the game is over
-    function gameOver() {
-
-    }
-
-
-
-   
+//   // Update the count display on the page
+//   $("#count").text(count);
+// });
 
 
