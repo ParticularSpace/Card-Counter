@@ -4,14 +4,31 @@ $(document).ready(function () {
   var liveCount = 0;
   var currentCount = 0;
 
+  $("#submit-cards-btn").on("click", function () {
+    var cards = [];
+    // Loop through all the text inputs and extract the card values.
+    for (let i = 0; i < 7; i++) {
+      let cardInput = $("#card" + (i + 1));
+      let cardValue = parseInt(cardInput.val());
+      cardsInHand = cards;
+
+      if (!isNaN(cardValue)) {
+        // If the input is a valid number, add it to the list of cards and
+        // update the count based on the card's value.
+        cards.push(cardValue);
+        cardsInHand = cards;
+        updateCount(cardValue);
+      }
+    }
+
   function getCountValue(cardValue) {
     // Define a function to get the value of a card based on its rank
     if (cardValue >= 2 && cardValue <= 6) {
-      return 1;
+      liveCount + 1;
     } else if (cardValue === 10 || cardValue >= 11) {
-      return -1;
+      liveCount - 1;
     } else {
-      return 0;
+      liveCount
     }
   }
 
@@ -41,21 +58,7 @@ $(document).ready(function () {
     $("#cards-in-hand").empty();
   });
 
-  $("#submit-cards-btn").on("click", function () {
-    var cards = [];
-    // Loop through all the text inputs and extract the card values.
-    for (let i = 0; i < 6; i++) {
-      let cardInput = $("#card" + (i + 1));
-      let cardValue = parseInt(cardInput.val());
 
-      if (!isNaN(cardValue)) {
-        // If the input is a valid number, add it to the list of cards and
-        // update the count based on the card's value.
-        cards.push(cardValue);
-        cardsInHand = cards;
-        updateCount(cardValue);
-      }
-    }
 
     // Update the live count based on the cards in hand.
     liveCount = getLiveCount(cardsInHand);
@@ -97,6 +100,8 @@ $(document).ready(function () {
     }, 0);
     var upCard = parseInt($("#up-card").val());
 
+    console.log(playerTotal);
+
     if (!Array.isArray(cardsInHand)) {
       return "Error: Invalid Hand";
     }
@@ -112,12 +117,14 @@ $(document).ready(function () {
 
     // Adjust the basic strategy decision based on the live count
     var liveCountAdjustmentIndex = playerTotal - 8;
+    console.log(liveCountAdjustmentIndex)
     if (count < 0) {
       liveCountAdjustmentIndex += 4; // use the adjustment matrix for counts -1 to -4
     } else if (count > 0) {
       liveCountAdjustmentIndex += 3; // use the adjustment matrix for counts +1 to +3
     }
     var liveCountAdjustmentRow = liveCountAdjustment[liveCountAdjustmentIndex];
+    console.log(liveCountAdjustmentRow);
     for (var i = 0; i < liveCountAdjustmentRow.length; i++) {
       if (liveCountAdjustmentRow[i] !== 0) {
         // If the live count adjustment is non-zero, update the basic strategy decision
