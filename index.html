@@ -24,9 +24,9 @@
       <label for="decks">Number of Decks:</label>
       <input type="number" id="decks" value="2" min="1" max="8" required />
     </div>
-    <div class="liveCount">
+    <div class="trueCount">
       <h2>True Count:</h2>
-      <p id="count-display" class="count"></p>
+      <p id="countDisplay" class="count"></p>
     <div class="suggestions">
       <h2>Next Move:</h2>
       <p id="best-move"></p>
@@ -35,7 +35,7 @@
       <h2>Dealer Cards:</h2>
       <div class="dealer-layout">
       <div class="card-select">
-        <select id="upCard" required>
+        <select id="upCard" >
           <option value="" selected disabled hidden>Select card...</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -51,7 +51,7 @@
           <option value="K">K</option>
           <option value="A">A</option>
         </select>
-        <select id="downCard" required>
+        <select id="downCard" >
           <option value="" selected disabled hidden>Select card...</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -73,8 +73,8 @@
       <h2>Player Cards:</h2>
 <div class="player-row">
   <div class="player">
-    <label for="cardOne">Enter current hand</label>
-    <select id="cardOne">
+    <label>Enter current hand</label>
+    <select id="cardOne" >
       <option value="" selected disabled hidden>Select card...</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -90,7 +90,7 @@
       <option value="K">K</option>
       <option value="A">A</option>
     </select>
-    <select id="cardTwo">
+    <select id="cardTwo" >
       <option value="" selected disabled hidden>Select card...</option>
       <option value="2">2</option>
       <option value="3">3</option>
@@ -117,7 +117,7 @@
 
     <div class="previous-hands">
       <h2>Previous Hands:</h2>
-      <ul class="hands"></ul>
+      <ul id='history' class="hands"></ul>
     </div>
   </div>
   </div>
