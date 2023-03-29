@@ -1,34 +1,90 @@
+const cardValue = {
+  "2": 1,
+  "3": 1,
+  "4": 1,
+  "5": 1,
+  "6": 1,
+  "7": 0,
+  "8": 0,
+  "9": 0,
+  "10": -1,
+  "J": -1,
+  "Q": -1,
+  "K": -1,
+  "A": -1
+};
+
+// An array to hold all the cards the user has selected for the game so far
+var cards = [];
+
 $(document).ready(function () {
 
+  
   var cardsInHand = [];
+  var dealersUpCard = [];
+  var dealersDownCard = [];
   var liveCount = 0;
   var currentCount = 0;
 
   $("#submit-cards-btn").on("click", function () {
-    var cards = [];
-    // Loop through all the text inputs and extract the card values.
-    for (let i = 0; i < 7; i++) {
-      let cardInput = $("#card" + (i + 1));
-      let cardValue = parseInt(cardInput.val());
-      cardsInHand = cards;
+    // If the user clicks the "Submit Cards" button, update the cards in hand and the count;
+    cards = []; // update the cards variable 
+    cardsInHand = []; // update the cardsInHand variable 
 
-      if (!isNaN(cardValue)) {
-        // If the input is a valid number, add it to the list of cards and
-        // update the count based on the card's value.
-        cards.push(cardValue);
-        cardsInHand = cards;
-        updateCount(cardValue);
-      }
+    // Extract the cards the user selected from the form
+    var dealerUpCardValue = $("#upCard").val();
+    var dealerDownCardValue = $("#downCard").val();
+    var card1 = $("#card1").val();
+    var card2 = $("#card2").val();
+
+    // Add the cards to the cardsInHand array and the dealers to the dealers array
+    cardsInHand.push(card1);
+    cardsInHand.push(card2);
+
+    console.log(cardsInHand);
+
+    dealersUpCard.push(dealerUpCardValue);
+    dealersDownCard.push(dealerDownCardValue);
+    // Update the history of cards after submitting target hands class to insert a list of past cards
+    var historyList = $("<ul>");
+    //push the cards to the cards array
+    cards.push(card1);
+    cards.push(card2);
+    cards.push(dealerUpCardValue);
+    cards.push(dealerDownCardValue);
+    //loop through the cards array and append the cards to the history list
+    for (var i = 0; i < cards.length; i++) {
+      var card = $("<li>").text(cards[i]);
+      historyList.append(card);
     }
+    //append the history list to the history div
+    $("#history").append(historyList);
+
+    // Update cardValue in cardsInHand based on user selection.
+    for (let i = 0; i < cardsInHand.length; i++) {
+      let cardValue = cardValue[cardsInHand[i]];
+      cardsInHand[i] = cardValue;
+    }
+  
+    // Update the live count based on the cards in hand.
+    liveCount = getLiveCount(cardsInHand);
+    console.log(cardsInHand);
+  
+    // Determine the best move based on the current count and cards in hand.
+    var basicDecision = getBestMove(liveCount, cardsInHand);
+
+    // Update the best move display on the page.
+    $("#best-move").text(basicDecision);
+  });
 
   function getCountValue(cardValue) {
     // Define a function to get the value of a card based on its rank
     if (cardValue >= 2 && cardValue <= 6) {
-      liveCount + 1;
+      return 1;
     } else if (cardValue === 10 || cardValue >= 11) {
-      liveCount - 1;
+      return -1;
     } else {
-      liveCount
+      return 0;
     }
   }
 
@@ -39,11 +95,36 @@ $(document).ready(function () {
       liveCount += getCountValue(cardsInHand[i]);
     }
     return liveCount;
+  
+  }
+
+  function adjustMove(move, adjustment) {
+    // Helper function to adjust the basic strategy move based on the current count
+    if (adjustment === 0) {
+      return move;
+    } else if (adjustment > 0) {
+      if (move === "H") {
+        return "D";
+      } else if (move === "S") {
+        return "H";
+      } else {
+        return move;
+      }
+    } else {
+      if (move === "H") {
+        return "S";
+      } else if (move === "D") {
+        return "H";
+      } else {
+        return move;
+      }
+    }
   }
 
   function updateCount(cardValue) {
     // Update the current count based on the card value
     currentCount += getCountValue(cardValue);
+    liveCount = getLiveCount(cardsInHand);
     // Update the count display on the page
     $("#count-display").text(currentCount);
     console.log(currentCount)
@@ -58,24 +139,23 @@ $(document).ready(function () {
     $("#cards-in-hand").empty();
   });
 
+  // Update the live count based on the cards in hand.
+  liveCount = getLiveCount(cardsInHand);
 
 
-    // Update the live count based on the cards in hand.
-    liveCount = getLiveCount(cardsInHand);
+  // Determine the best move based on the current count and cards in hand.
+  var basicDecision = getBestMove(liveCount, cardsInHand);
 
-    // Update the cards in hand with the new cards.
-    cardsInHand = cards;
-
-    // Determine the best move based on the current count and cards in hand.
-    var basicDecision = getBestMove(currentCount, cardsInHand);
-
-    // Update the best move display on the page.
-    $("#best-move").text(basicDecision);
-});
+  // Update the best move display on the page.
+  $("#best-move").text(basicDecision);
 
 
-  function getBestMove(count, cardsInHand) {
-    // Define the basic strategy decision matrix for hard totals (excluding pairs and soft hands)
+  
+
+
+
+  function getBestMove(count, cardsInHand, dealUpCard) {
+    // Define the basic strategy decision matrix for hard totals
     var basicStrategy = [["H", "H", "H", "H", "H", "H", "H", "H", "H", "H"], // hard 8 or less
     ["H", "D", "D", "D", "D", "H", "H", "H", "H", "H"], // hard 9
     ["D", "D", "D", "D", "D", "D", "D", "D", "H", "H"], // hard 10
@@ -84,8 +164,32 @@ $(document).ready(function () {
     ["S", "H", "S", "S", "S", "H", "H", "H", "H", "H"], // hard 13-16
     ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"], // hard 17 or more
     ];
+
+    // Soft Hands Basic Strategy Decision Matrix
+    const softBasicStrategy = [["H", "H", "H", "D", "D", "H", "H", "H", "H", "H"], // soft 13-14
+    ["H", "H", "H", "D", "D", "H", "H", "H", "H", "H"], // soft 15-16
+    ["H", "H", "D", "D", "D", "H", "H", "H", "H", "H"], // soft 17
+    ["H", "H", "D", "D", "D", "H", "H", "H", "H", "H"], // soft 18
+    ["H", "D", "D", "D", "D", "H", "H", "H", "H", "H"], // soft 19
+    ["S", "S", "S", "S", "D", "S", "S", "H", "H", "H"], // soft 20
+    ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]  // soft 21
+    ];
+
+    // Pairs Basic Strategy Decision Matrix
+    const pairs = [["P", "P", "P", "P", "P", "P", "H", "H", "H", "H"], // pairs of Aces
+    ["P", "P", "P", "P", "P", "P", "H", "H", "H", "H"], // pairs of 2s
+    ["H", "H", "H", "P", "P", "H", "H", "H", "H", "H"], // pairs of 3s
+    ["H", "H", "H", "P", "P", "H", "H", "H", "H", "H"], // pairs of 4s
+    ["H", "H", "H", "H", "H", "H", "H", "H", "H", "H"], // pairs of 5s
+    ["P", "P", "P", "P", "P", "H", "H", "H", "H", "H"], // pairs of 6s
+    ["H", "H", "H", "P", "P", "H", "H", "H", "H", "H"], // pairs of 7s
+    ["H", "H", "H", "P", "P", "H", "H", "H", "H", "H"], // pairs of 8s
+    ["P", "P", "P", "P", "P", "P", "P", "P", "H", "H"], // pairs of 9s
+    ["S", "S", "S", "S", "S", "S", "S", "S", "S", "S"]  // pairs of 10s
+    ];
+
     // Define the live count adjustment matrix for hard totals
-    var liveCountAdjustment = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // hard 8 or less
+    var countAdjustment = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // hard 8 or less
     [0, 1, 1, 1, 1, 1, 1, 1, 1, 1], // hard 9
     [0, 1, 1, 1, 1, 1, 1, 1, 0, 0], // hard 10
     [0, 1, 1, 1, 1, 1, 1, 1, 0, 0], // hard 11
@@ -93,61 +197,112 @@ $(document).ready(function () {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // hard 13-16
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // hard 17 or more
     ];
+    // Define the live count adjustment matrix for soft totals
+    var handType;
+  if (cardsInHand[0].value === cardsInHand[1].value) {
+    handType = "pair";
+  } else if (cardsInHand.some(card => card.value === "A")) {
+    handType = "soft";
+  } else {
+    handType = "hard";
+  }
 
-    // Calculate the player's total based on the cards in hand
-    var playerTotal = cardsInHand.reduce(function (sum, cardValue) {
-      return sum + getCountValue(cardValue);
-    }, 0);
-    var upCard = parseInt($("#up-card").val());
+  // Look up the player's hand and the dealer's up card in the appropriate basic strategy decision matrix
+  var decisionMatrix;
+  switch (handType) {
+    case "soft":
+      decisionMatrix = softBasicStrategy;
+      break;
+    case "hard":
+      decisionMatrix = basicStrategy;
+      break;
+    case "pair":
+      decisionMatrix = pairs;
+      break;
+  }
 
-    console.log(playerTotal);
+  // Determine the row and column of the matrix to use
+  var row = getMatrixRow(cardsInHand, handType);
+  var col = getMatrixCol(dealUpCard);
 
-    if (!Array.isArray(cardsInHand)) {
-      return "Error: Invalid Hand";
-    }
+  // Apply the count adjustment
+  var matrixValue = decisionMatrix[row][col];
+  var adjustment = countAdjustment[row][col];
+  if (count > 0) {
+    matrixValue += adjustment;
+  } else if (count < 0) {
+    matrixValue -= adjustment;
+  }
 
-    // If the player has a pair, use the basic strategy matrix for pairs
-    var basicDecision;
-    if (playerTotal >= 8 && playerTotal <= 16 && upCard >= 2 && upCard <= 11) {
-      basicDecision = basicStrategy[playerTotal - 8][upCard - 2];
+  // Return the recommended move
+  switch (matrixValue) {
+    case "H":
+      return "Hit";
+    case "S":
+      return "Stand";
+    case "D":
+      return "Double down";
+    case "P":
+      return "Split";
+    case "R":
+      return "Surrender";
+  }
+}
+console.log(cardsInHand);
+function getMatrixRow(cardsInHand, dealUpCard) {
+  // Determine the type of the player's hand (hard, soft, or pair)
+  var handType;
+  if (cardsInHand[0].value === cardsInHand[1].value) {
+    handType = "pair";
+  } else if (cardsInHand.some(card => card.value === "A")) {
+    handType = "soft";
+  } else {
+    handType = "hard";
+  }
+
+  function getMatrixCol(dealUpCard) {
+    var cardValue = dealUpCard.value;
+    if (isNaN(cardValue)) {
+      return cardValue;
+    } else if (cardValue >= 2 && cardValue <= 10) {
+      return cardValue - 2;
     } else {
-      basicDecision = "Error: Invalid Hand";
-    }
-    
-
-    // Adjust the basic strategy decision based on the live count
-    var liveCountAdjustmentIndex = playerTotal - 8;
-    console.log(liveCountAdjustmentIndex)
-    if (count < 0) {
-      liveCountAdjustmentIndex += 4; // use the adjustment matrix for counts -1 to -4
-    } else if (count > 0) {
-      liveCountAdjustmentIndex += 3; // use the adjustment matrix for counts +1 to +3
-    }
-    var liveCountAdjustmentRow = liveCountAdjustment[liveCountAdjustmentIndex];
-    console.log(liveCountAdjustmentRow);
-    for (var i = 0; i < liveCountAdjustmentRow.length; i++) {
-      if (liveCountAdjustmentRow[i] !== 0) {
-        // If the live count adjustment is non-zero, update the basic strategy decision
-        if (liveCountAdjustmentRow[i] > 0) {
-          basicDecision = "D"; // double down
-        } else if (liveCountAdjustmentRow[i] < 0) {
-          basicDecision = "H"; // hit
-        }
+      switch (cardValue) {
+        case "J":
+        case "Q":
+        case "K":
+          return 9;
+        case "A":
+          return 0;
       }
     }
-
-    // Return the best move based on the basic strategy decision
-    if (basicDecision === "H") {
-      return "Hit";
-    } else if (basicDecision === "S") {
-      return "Stand";
-    } else if (basicDecision === "D") {
-      return "Double Down";
-    } else if (basicDecision === "P") {
-      return "Split";
-    } else {
-      return "Error: Invalid Basic Strategy Decision";
-    }
   }
+  
+  // Get the appropriate matrix based on the hand type
+  var matrix;
+  if (handType === "hard") {
+    matrix = basicStrategy;
+  } else if (handType === "soft") {
+    matrix = softBasicStrategy;
+  } else {
+    matrix = pairs;
+  }
+
+  // Get the appropriate row from the matrix based on the dealer's up card
+  var dealerUpCardValue = parseInt(dealUpCard.value);
+  if (isNaN(dealerUpCardValue)) {
+    dealerUpCardValue = 10; // Treat face cards as 10
+  }
+  var row = matrix[dealerUpCardValue - 2];
+
+  // Adjust the row based on the current count
+  var countAdjustmentRow = countAdjustment[dealerUpCardValue - 2];
+  for (var i = 0; i < row.length; i++) {
+    row[i] = adjustMove(row[i], countAdjustmentRow[i]);
+  }
+
+  return row;
+}
+
 
 });

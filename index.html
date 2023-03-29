@@ -13,8 +13,7 @@
     <h1 class="title">Blackjack Card Counter</h1>
     <div class="description">
       <p>
-        Select the cards for each player and dealer, and enter the number of
-        decks in the shoe.
+        Select the cards for the hand you want to see versus the dealer!
       </p>
       <p>
         The card count and suggested next move will be updated based on
@@ -23,10 +22,10 @@
     </div>
     <div class="input-group">
       <label for="decks">Number of Decks:</label>
-      <input type="number" id="decks" value="6" min="1" max="8" required />
+      <input type="number" id="decks" value="2" min="1" max="8" required />
     </div>
     <div class="liveCount">
-      <h2>Live Count:</h2>
+      <h2>True Count:</h2>
       <p id="count-display" class="count"></p>
     <div class="suggestions">
       <h2>Next Move:</h2>
@@ -36,7 +35,7 @@
       <h2>Dealer Cards:</h2>
       <div class="dealer-layout">
       <div class="card-select">
-        <select id="dealer-1" required>
+        <select id="upCard" required>
           <option value="" selected disabled hidden>Select card...</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -52,7 +51,7 @@
           <option value="K">K</option>
           <option value="A">A</option>
         </select>
-        <select id="dealer-2" required>
+        <select id="downCard" required>
           <option value="" selected disabled hidden>Select card...</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -72,254 +71,44 @@
       </div>
 
       <h2>Player Cards:</h2>
-      <div class="player-row">
-        <div class="player">
-          <label for="player-1-1">Player 1:</label>
-          <select id="player-1-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-1-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-2-1">Player 2:</label>
-          <select id="player-2-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-2-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-3-1">Player 3:</label>
-          <select id="player-3-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-3-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-4-1">Player 4:</label>
-          <select id="player-4-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-4-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-5-1">Player 5:</label>
-          <select id="player-5-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-5-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-6-1">Player 6:</label>
-          <select id="player-6-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-6-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-        <div class="player">
-          <label for="player-7-1">Player 7:</label>
-          <select id="player-7-1" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-          <select id="player-7-2" required>
-            <option value="" selected disabled hidden>Select card...</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="J">J</option>
-            <option value="Q">Q</option>
-            <option value="K">K</option>
-            <option value="A">A</option>
-          </select>
-        </div>
-      </div>
-    
+<div class="player-row">
+  <div class="player">
+    <label for="cardOne">Enter current hand</label>
+    <select id="cardOne">
+      <option value="" selected disabled hidden>Select card...</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="J">J</option>
+      <option value="Q">Q</option>
+      <option value="K">K</option>
+      <option value="A">A</option>
+    </select>
+    <select id="cardTwo">
+      <option value="" selected disabled hidden>Select card...</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="J">J</option>
+      <option value="Q">Q</option>
+      <option value="K">K</option>
+      <option value="A">A</option>
+    </select>
+  </div>
+</div>
+
     <div class="button-group">
       <button id="submit-cards-btn" class="btn-primary">Submit</button>
       <button id="reset-cards-btn" class="btn-primary">Reset Cards</button>
@@ -335,5 +124,5 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="assets/js/script.js"></script>
 </body>
-
 </html>
+
