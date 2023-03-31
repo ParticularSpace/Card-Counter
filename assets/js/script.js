@@ -1,3 +1,7 @@
+//current issues submitting hit card and down card have issues in logic and not updating the count
+//previous hands are not being shown when you click hit card or down card
+
+
 const cardValue = {
   "2": 1,
   "3": 1,
