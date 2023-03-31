@@ -9,116 +9,172 @@
 </head>
 
 <body>
+  <header>
+    <h1 class="title">Blackjack Partner</h1>
+  </header>
+
   <div class="container">
-    <h1 class="title">Blackjack Card Counter</h1>
-    <div class="description">
-      <p>
-        Select the cards for the hand you want to see versus the dealer!
-      </p>
-      <p>
-        The card count and suggested next move will be updated based on
-        perfect blackjack strategy and the true count.
-      </p>
-    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">What is Blackjack Partner?</h5>
+        <p class="card-text">Blackjack Partner is an application that helps you improve your blackjack game by providing suggestions based on perfect blackjack strategy and the true count. Simply select the cards for your hand and the dealer's up card, and the app will give you the best move to make.</p>
+      </div>
+    </div>    
     <div class="input-group">
       <label for="decks">Number of Decks:</label>
-      <input type="number" id="decks" value="2" min="1" max="8" required />
-    </div>
-    <div class="trueCount">
-      <h2>True Count:</h2>
-      <p id="countDisplay" class="count"></p>
-    <div class="suggestions">
-      <h2>Next Move:</h2>
-      <p id="best-move"></p>
+      <input type="number" id="numDecks" value="1" min="1" max="8" />
     </div>
 
-      <h2>Dealer Cards:</h2>
-      <div class="dealer-layout">
-      <div class="card-select">
-        <select id="upCard" >
-          <option value="" selected disabled hidden>Select card...</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="J">J</option>
-          <option value="Q">Q</option>
-          <option value="K">K</option>
-          <option value="A">A</option>
-        </select>
-        <select id="downCard" >
-          <option value="" selected disabled hidden>Select card...</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="J">J</option>
-          <option value="Q">Q</option>
-          <option value="K">K</option>
-          <option value="A">A</option>
-        </select>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Dealer Cards</h2>
+        <div class="form-group">
+          <div class="dealers-inputs">
+            <div class="form-group w-50 mr-2">
+              <label for="upCard">Up Card:</label>
+              <select class="form-control form-control-lg" id="upCard">
+                <option value="" selected disabled hidden>Select card...</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="J">J</option>
+                <option value="Q">Q</option>
+                <option value="K">K</option>
+                <option value="A">A</option>
+              </select>
+            </div>
+            <div class="form-group w-50 ml-2">
+              <label for="downCard">Down Card:</label>
+              <select class="form-control form-control-lg" id="downCard">
+                <option value="" selected disabled hidden>Select card...</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="J">J</option>
+                <option value="Q">Q</option>
+                <option value="K">K</option>
+                <option value="A">A</option>
+              </select>
+            </div>
+          </div>
+          <button id="downCardSubmit" class="btn btn-lg btn-success btn-block mt-4">Submit Down Card</button>
+        </div>
       </div>
+    </div>
+    
+    
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Player Cards</h2>
+        <div class="player-row">
+          <div class="player-inputs">
+            <div class="form-group card1">
+              <label for="cardOne">Card 1:</label>
+              <select class="form-control" id="cardOne">
+                <option value="" selected disabled hidden>Select card...</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="J">J</option>
+                <option value="Q">Q</option>
+                <option value="K">K</option>
+                <option value="A">A</option>
+              </select>
+            </div>
+            <div class="form-group card2">
+              <label for="cardTwo">Card 2:</label>
+              <select class="form-control" id="cardTwo">
+                <option value="" selected disabled hidden>Select card...</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="J">J</option>
+                <option value="Q">Q</option>
+                <option value="K">K</option>
+                <option value="A">A</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group hit-card">
+          <label for="hitCard">If you hit:</label>
+          <select class="form-control" id="hitCard">
+            <option value="">Select card...</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="J">J</option>
+            <option value="Q">Q</option>
+            <option value="K">K</option>
+            <option value="A">A</option>
+          </select>
+        </div>
+        <div class="button-group">
+          <button id="submit-cards-btn" class="btn btn-primary">Submit All</button>
+          <button id="submit-hit-card-btn" class="btn btn-primary">Submit Hit Card</button>
+          <button id="resetBtn" class="btn btn-primary">Reset All</button>
+        </div>
       </div>
-
-      <h2>Player Cards:</h2>
-<div class="player-row">
-  <div class="player">
-    <label>Enter current hand</label>
-    <select id="cardOne" >
-      <option value="" selected disabled hidden>Select card...</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="J">J</option>
-      <option value="Q">Q</option>
-      <option value="K">K</option>
-      <option value="A">A</option>
-    </select>
-    <select id="cardTwo" >
-      <option value="" selected disabled hidden>Select card...</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="J">J</option>
-      <option value="Q">Q</option>
-      <option value="K">K</option>
-      <option value="A">A</option>
-    </select>
-  </div>
-</div>
-
-    <div class="button-group">
-      <button id="submit-cards-btn" class="btn-primary">Submit</button>
-      <button id="reset-cards-btn" class="btn-primary">Reset Cards</button>
-      <button id="reset-count-btn" class="btn-primary">Reset Count</button>
     </div>
-
-    <div class="previous-hands">
-      <h2>Previous Hands:</h2>
-      <ul id='history' class="hands"></ul>
+    
+    <div class="card-group">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">True Count</h2>
+          <div class="true-count">
+            <h3 class="card-text">+1</h3>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Next Move</h2>
+          <div class="next-move">
+            <h3 class="card-text">Hit</h3>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <div class="previous-hands card">
+      <div class="card-body">
+        <h2 class="card-title">Previous Hands:</h2>
+        <ul id="history" class="hands"></ul>
+      </div>
+    </div>
+    
+    
   </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
