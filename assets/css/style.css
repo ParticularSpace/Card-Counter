@@ -46,8 +46,15 @@ button {
 .card-text {
   font-size: 18px;
   line-height: 1.5;
-  margin-bottom: 0;
+  margin-bottom: 10;
 }
+
+#countDisplay {
+  font-size: 40px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
 
 .input-group label {
   display: inline-block;
