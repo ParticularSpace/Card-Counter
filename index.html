@@ -17,13 +17,32 @@
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">What is Blackjack Partner?</h5>
-        <p class="card-text">Blackjack Partner is an application that helps you improve your blackjack game by providing suggestions based on perfect blackjack strategy and the true count. Simply select the cards for your hand and the dealer's up card, and the app will give you the best move to make.</p>
+        <p class="card-text">Blackjack Partner is an application that helps you improve your blackjack game by providing
+          suggestions based on perfect blackjack strategy and the true count. Simply select the cards for your hand and
+          the dealer's up card, and the app will give you the best move to make.</p>
       </div>
-    </div>    
-    <div class="input-group">
-      <label for="decks">Number of Decks:</label>
-      <input type="number" id="numDecks" value="1" min="1" max="8" />
     </div>
+    <div class="card">
+      <div class="card-body button-group">
+        <div class="input-group">
+          <label for="decks">Number of Decks:</label>
+          <input type="number" id="numDecks" value="1" min="1" max="8" />
+        </div>
+        <div class="input-group">
+          <label for="minBet">Minimum Bet:</label>
+          <input type="number" id="minBet" value="1" min="1" />
+        </div>
+        <div class="input-group">
+          <label for="maxBet">Maximum Bet:</label>
+          <input type="number" id="maxBet" value="100" min="1" />
+        </div>
+        <div class="input-group">
+          <label for="playerBankroll">Player Bankroll:</label>
+          <input type="number" id="playerBankroll" value="1000" min="1" />
+        </div>
+      </div>
+    </div>
+
 
 
     <div class="card">
@@ -74,8 +93,8 @@
         </div>
       </div>
     </div>
-    
-    
+
+
     <div class="card">
       <div class="card-body">
         <h2 class="card-title">Player Cards</h2>
@@ -147,7 +166,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="card-group">
       <div class="card">
         <div class="card-body">
@@ -165,20 +184,28 @@
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">Bet Size</h2>
+          <div class="true-count">
+            <h3 class="bet-size">$0</h3>
+          </div>
+        </div>
+      </div>
     </div>
-    
+
     <div class="previous-hands card">
       <div class="card-body">
         <h2 class="card-title">Previous Hands:</h2>
         <ul id="history" class="hands"></ul>
       </div>
     </div>
-    
-    
+
+
   </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="assets/js/script.js"></script>
 </body>
-</html>
 
+</html>
