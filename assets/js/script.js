@@ -29,31 +29,32 @@ const cardWorth = {
   "K": 10,
   "A": 11
 };
-
-
-// An array to hold all the cards the user has selected for the game so far
-var cards = [];
-
 $(document).ready(function () {
+
+  // An array to hold all the cards the user has selected for the game so far
+  var cards = [];
+
+
 
   var numDecks = $("#numDecks").val();
   var cardsInHand = [];
+  var dealersHand = [];
   var dealerUpCard = [];
-  var dealerDownCard = [];
   var trueCount = 0;
   let playerHandTotal = 0;
   let dealerHandTotal = 0;
-  var oddsOfSuccess = 0;
+  let oddsOfSuccess = 0;
+  let betSize = 0;
 
 
-  
+  //Get the total card value of your hand
 
-  function calculateHandTotal(hand) {
+  function calculateHandTotal(cardsInHand) {
     var total = 0;
     var aces = 0;
 
-    for (var i = 0; i < hand.length; i++) {
-      var card = hand[i];
+    for (var i = 0; i < cardsInHand.length; i++) {
+      var card = cardsInHand[i];
       var worth = cardWorth[card];
 
       if (card === "A") {
@@ -68,9 +69,11 @@ $(document).ready(function () {
         aces--;
       }
     }
-    console.log(total)
+    console.log('This is your total: ' + total)
     return total;
   }
+
+  //calculate the true count based off of all the cards in the game
 
   function getTrueCount(cards, numDecks) {
     var liveCount = 0;
@@ -83,121 +86,185 @@ $(document).ready(function () {
     return trueCount;
   }
 
+  //get the value of yours or dealers hand
+  function getHandValue(cardsInHand) {
+    let value = 0;
+    let aces = 0;
+    for (let card of cardsInHand) {
+      const cardValue = cardWorth[card];
+      value += cardValue;
+      if (card === "A") {
+        aces++;
+      }
+    }
+    while (aces > 0 && value > 21) {
+      value -= 10;
+      aces--;
+    }
+    return value;
+  }
+
+  //First major submit button, needs to update your cards, dealers cards, the whole cards array, then need to update true count, probability of dealer bust, probability of player bust, next best move, bet size, and update history list //
+
   $("#submit-cards-btn").on("click", function () {
 
+    //grab the up card and your two cards value
     var $dealerUpCard = $("#upCard").val();
-
     var card1 = $("#cardOne").val();
     var card2 = $("#cardTwo").val();
 
+    //push the two personal selected cards into your cardsInHand array that represents your cards
     cardsInHand.push(card1);
     cardsInHand.push(card2);
 
+    //push the dealers up card into dealerUpCard array
+    dealersHand.push($dealerUpCard);
+
+    //call calculateHandTotal to get the total value of the cards in your hand
     playerHandTotal = calculateHandTotal(cardsInHand);
-    console.log("Player hand total:", playerHandTotal);
+
+    //call the calculateHandTotal to get the total value of the dealers cards
+    dealerHandTotal = calculateHandTotal(dealersHand);
 
     // Update the cards array
-    cards = cards.concat(cardsInHand).concat(dealerUpCard);
+    cards = cards.concat(cardsInHand).concat(dealersHand);
 
-    //console log the cards
-    console.log('Your hand is: ' + card1 + ' , ' + card2 + ' Dealers hand is ' + $dealerUpCard);
+    //console log the cards in your hand and dealers
+    console.log('Your hand is: ' + card1 + ' , ' + card2 + ' Dealers hand is ' + dealersHand);
 
-    dealerUpCard.push($dealerUpCard);
-    
-    dealerHandTotal = calculateHandTotal(dealerUpCard);
-    console.log("Dealer hand total:", dealerHandTotal);
-
-    // Update the history display
-    updateHistoryDisplay();
-
-    // Update the live count
+    // set trueCount to check the cards for the whole game and num decks to determine count
     trueCount = getTrueCount(cards, numDecks);
+
+    //set text to trueCount value
     $("#countDisplay").text(trueCount);
 
-    const oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealerUpCard, trueCount, numDecks);
-    const move = getBestMove(cardsInHand, dealerUpCard[0], trueCount, oddsOfSuccess);
+    //getOddsOfSuccess after hitting submit
+    oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealersHand, trueCount, numDecks);
+
+    //getBestMove after hitting submit
+    move = getBestMove(cardsInHand, dealersHand, trueCount, oddsOfSuccess);
     $(".next-move h3").text(move);
 
-    const betSize = calculateBetSize(trueCount, oddsOfSuccess);
+    //calculateBetSize after hitting submit
+    betSize = calculateBetSize(trueCount, oddsOfSuccess);
     $(".bet-size").text(betSize);
+
+    // Update the history display last cards
+    updateHistoryDisplay();
+
   });
 
   // When the user clicks the "Hit" button, add the card to the cards in hand and update the count
   $("#submit-hit-card-btn").on("click", function () {
 
-
+    // get the hitCard value which could be any of this hits keep updating hand dont clear
     var hitCard = $("#hitCard").val();
 
-    if (hitCard) {
-      cards.push(hitCard);
-      cardsInHand.push(hitCard);
-      playerHandTotal = calculateHandTotal(cardsInHand);
-      console.log("Player hand total:", playerHandTotal);
+    //push hitCard into all cards array
+    cards.push(hitCard);
 
+    //push hit card into your hand so now you have three cards or more
+    cardsInHand.push(hitCard);
 
+    //call calculateHandTotal for new cardsInHand
+    playerHandTotal = calculateHandTotal(cardsInHand);
+    console.log("Player hand total:", playerHandTotal);
 
-      //update live count on page
-      trueCount = getTrueCount(cards, numDecks);
+    // set trueCount to check the cards for the whole game and num decks to determine count
+    trueCount = getTrueCount(cards, numDecks);
+
+    //set text to trueCount value
+    $("#countDisplay").text(trueCount);
+
+    //getOddsOfSuccess after hitting submit
+    oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealerUpCard, trueCount, numDecks);
+
+    //getBestMove after hitting submit
+    getBestMove(cardsInHand, dealerUpCard, trueCount, oddsOfSuccess);
+    $(".next-move h3").text(move);
+
+    //calculateBetSize after hitting submit
+    betSize = calculateBetSize(trueCount, oddsOfSuccess);
+    $(".bet-size").text(betSize);
+
+    // Update the history display last cards
+    updateHistoryDisplay();
+
+  });
+
+  // When the user enters the dealers down card and submits it 
+  $("#downCardSubmit").on("click", function () {
+
+    // Get the down card value
+    var hiddenCard = $("#downCard").val();
+
+    // push the down card into the cards array with the other cards
+    cards.push(hiddenCard);
+
+    // Add the revealed card to the dealers hand array
+    dealersHand.push(hiddenCard);
+
+    // Recalculate the dealer's hand total using the dealersHand array
+    dealerHandTotal = calculateHandTotal(dealersHand);
+
+    // set trueCount to check the cards for the whole game and num decks to determine count
+    trueCount = getTrueCount(cards, numDecks);
+
+    //set text to trueCount value
+    $("#countDisplay").text(trueCount);
+
+    //getOddsOfSuccess after hitting submit
+    oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealerUpCard, trueCount, numDecks);
+    console.log("Odds of success:", oddsOfSuccess)
+
+    //getBestMove after hitting submit
+    bestMove = getBestMove(cardsInHand, dealerUpCard, trueCount, oddsOfSuccess);
+    $(".next-move h3").text(bestMove);
+
+    //calculateBetSize after hitting submit
+    betSize = calculateBetSize(trueCount, oddsOfSuccess);
+    $(".bet-size").text(betSize);
+
+    // Update the history display last cards
+    updateHistoryDisplay();
+
+  });
+
+  $("#resetBtn").on("click", function () {
+    if (confirm("Are you sure you want to reset the game?")) {
+      cards = [];
+      cardsInHand = [];
+      dealersHand = [];
+      dealerDownCard = [];
+      trueCount = 0;
       $("#countDisplay").text(trueCount);
-
       updateHistoryDisplay();
-
-      const oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealerUpCard[0], trueCount, numDecks);
-      const move = getBestMove(cardsInHand, dealerUpCard[0], trueCount, oddsOfSuccess);
-      $(".next-move h3").text(move);
-
-    } else {
-      alert("Please select a card before submitting.");
     }
   });
 
-// When the user clicks the "Dealer Card Reveal" button, reveal the dealer's card and update the count
-$("#downCardSubmit").on("click", function () {
-
-  // Get the hidden card from the dealerDownCard array
-  var hiddenCard = dealerDownCard[0];
-
-  // Add the revealed card to the dealerUpCard array
-  dealerUpCard.push(hiddenCard);
-
-  // Recalculate the dealer's hand total using the dealerUpCard array
-  dealerHandTotal = calculateHandTotal(dealerUpCard);
-  console.log("Dealer hand total:", dealerHandTotal);
-
-  // Update the count
-  trueCount = getTrueCount(cards, numDecks);
-  $("#countDisplay").text(trueCount);
-
-  updateHistoryDisplay();
-
-  // Update the move based on the new information
-  const oddsOfSuccess = calculateOddsOfSuccess(cardsInHand, dealerUpCard, trueCount, numDecks);
-  const move = getBestMove(cardsInHand, dealerUpCard, trueCount, oddsOfSuccess);
-  $(".next-move h3").text(move);
-
-});
-
-$("#resetBtn").on("click", function () {
-  if (confirm("Are you sure you want to reset the game?")) {
-    cards = [];
-    cardsInHand = [];
-    dealerUpCard = [];
-    dealerDownCard = [];
-    trueCount = 0;
-    $("#countDisplay").text(trueCount);
-    updateHistoryDisplay();
-  }
-});
 
 
 
-  function isPair(hand) {
-    return hand.length === 2 && hand[0] === hand[1];
+
+
+  function isPair(cardsInHand) {
+    return cardsInHand.length === 2 && cardsInHand[0] === cardsInHand[1];
   }
 
-  function isSoft(hand) {
-    return hand.includes("A") && hand.some(card => card !== "A" && getCardValue(card) < 10);
+
+
+
+
+
+  function isSoft(cardsInHand) {
+    return cardsInHand.includes("A") && cardsInHand.some(card => card !== "A" && getCardValue(card) < 10);
   }
+
+
+
+
+
+
 
   function getCardValue(card) {
     if (card === "A") {
@@ -208,7 +275,10 @@ $("#resetBtn").on("click", function () {
       return parseInt(card, 10);
     }
   }
-  
+
+
+
+
 
 
   function updateHistoryDisplay() {
@@ -226,8 +296,70 @@ $("#resetBtn").on("click", function () {
     $("#history").append(historyList);
   }
 
-  function getBestMove(playerHand, dealerUpCard, trueCount) {
 
+
+
+
+  //
+  function adjustBestMoveForTrueCount(bestMove, handType, trueCount) {
+    if (handType === "hard") {
+      if (trueCount >= 5 && (bestMove === "H" || bestMove === "S")) {
+        return "D";
+      } else if (trueCount <= -1 && bestMove === "D") {
+        return "H";
+      }
+    } else if (handType === "soft") {
+      if (trueCount >= 4 && bestMove === "H") {
+        return "D";
+      } else if (trueCount <= -1 && bestMove === "D") {
+        return "H";
+      }
+    } else if (handType === "pairs") {
+      if (trueCount >= 6 && bestMove === "P") {
+        return "S";
+      } else if (trueCount <= -4 && bestMove === "P") {
+        return "H";
+      }
+    }
+  
+    return bestMove;
+  }
+
+
+
+
+
+  function getBestMove(playerHand, dealersHand, trueCount, useMonteCarlo = false) {
+    if (useMonteCarlo) {
+      // Define a list of possible actions
+      const actions = ['H', 'S', 'D', 'P'];
+  
+      // Initialize an object to store win rates for each action
+      const winRates = {};
+  
+      // Perform Monte Carlo simulations for each action
+      for (const action of actions) {
+        let wins = 0;
+        const numSimulations = 10000;
+  
+        for (let i = 0; i < numSimulations; i++) {
+          const result = simulateGame(playerHand, dealersHand[0], trueCount, action);
+          if (result === 'win') {
+            wins++;
+          }
+        }
+  
+        winRates[action] = wins / numSimulations;
+      }
+  
+      // Find the action with the highest win rate
+      const bestMove = Object.keys(winRates).reduce((a, b) => winRates[a] > winRates[b] ? a : b);
+  
+      return bestMove;
+
+    } else {
+
+    let dealerUpCardValue = dealersHand[0].value;
 
     // Implement a function to determine the best move based on perfect blackjack strategy
     const basicStrategyChart = {
@@ -282,61 +414,30 @@ $("#resetBtn").on("click", function () {
       ]
     };
 
-    function getHandValue(hand) {
-      let value = 0;
-      let aces = 0;
-      for (let card of hand) {
-        const cardValue = cardWorth[card];
-        value += cardValue;
-        if (card === "A") {
-          aces++;
-        }
-      }
-      while (aces > 0 && value > 21) {
-        value -= 10;
-        aces--;
-      }
-      return value;
+    let handType;
+    let playerHandIndex;
+
+    if (isPair(playerHand)) {
+      handType = 'pairs';
+      playerHandIndex = playerHand[0].value === 11 ? 9 : playerHand[0].value - 2;
+    } else if (isSoft(playerHand)) {
+      handType = 'soft';
+      playerHandIndex = getHandValue(playerHand) - 13;
+    } else {
+      handType = 'hard';
+      playerHandIndex = getHandValue(playerHand) - 4;
     }
-    
-
-  let handType;
-  let playerHandIndex;
-
-  if (isPair(playerHand)) {
-    handType = 'pairs';
-    playerHandIndex = playerHand[0].value === 11 ? 9 : playerHand[0].value - 2;
-  } else if (isSoft(playerHand)) {
-    handType = 'soft';
-    playerHandIndex = getHandValue(playerHand) - 13;
-  } else {
-    handType = 'hard';
-    playerHandIndex = getHandValue(playerHand) - 4;
-  }
 
     let dealerUpCardIndex = dealerUpCardValue === 11 ? 9 : dealerUpCardValue - 2;
 
-    const bestMove = basicStrategyChart[handType][playerHandIndex][dealerUpCardIndex];
+    let bestMove = basicStrategyChart[handType][playerHandIndex][dealerUpCardIndex];
+  
+  // Adjust the best move based on the true count
+  const adjustedBestMove = adjustBestMoveForTrueCount(bestMove, handType, trueCount);
 
-    console.log(bestMove);
-
-    if (trueCount >= 4 && bestMove === "H") {
-      return "Double";
-    } else if (trueCount <= -4 && bestMove === "D") {
-      return "Hit";
-    } else {
-      if (oddsOfSuccess >= 0.6) {
-        return bestMove;
-      } else {
-        return "Hit";
-      }
-    }
+  return adjustedBestMove;
   }
-
-
-const dealerUpCardValue = cardWorth[dealerUpCard];
-
-console.log('This is the dealer up card value'+ dealerUpCardValue);
+}
 
 
   function calculateOddsOfSuccess(playerHand, dealerUpCard, trueCount, numDecks) {
@@ -364,7 +465,7 @@ console.log('This is the dealer up card value'+ dealerUpCardValue);
 
     const dealerBustProb = dealerBustProbability(dealerUpCard, trueCount);
 
-    console.log('This is the dealer bust probability'+ dealerBustProb);
+    console.log('This is the dealer bust probability' + dealerBustProb);
 
 
 
@@ -398,26 +499,15 @@ console.log('This is the dealer up card value'+ dealerUpCardValue);
     return oddsOfSuccess;
   }
 
-  function calculateBetSize(oddsOfSuccess, playerBankroll, minBet, maxBet) {
-    // Calculate the expected value (EV) of the bet
-    const ev = oddsOfSuccess * 2 - 1;
+  function calculateBetSize(trueCount, oddsOfSuccess) {
+    const baseBet = 10; // You can adjust this value according to your preferred base bet size
+    const kellyFraction = 0.5; // You can adjust this value to change the level of risk (0.5 is a common choice for moderate risk)
 
-    console.log(ev);
+    const advantage = (trueCount - 1) * 0.5; // Estimate the player's advantage based on the true count
+    const optimalBetProportion = (oddsOfSuccess * (advantage + 1) - 1) / advantage;
+    const betSize = Math.round(baseBet + (baseBet * kellyFraction * optimalBetProportion));
 
-    // Calculate the fraction of the bankroll to bet using the Kelly Criterion
-    const kellyFraction = ev / (2 * oddsOfSuccess - 1);
-
-    // Calculate the optimal bet size based on the Kelly Criterion
-    const optimalBetSize = kellyFraction * playerBankroll;
-
-    console.log(optimalBetSize)
-
-    // Ensure the bet size is within the minBet and maxBet limits
-    const betSize = Math.max(minBet, Math.min(maxBet, optimalBetSize));
-
-    console.log(betSize);
-
-    return Math.round(betSize);
+    return Math.max(betSize, baseBet);
   }
 
 });
